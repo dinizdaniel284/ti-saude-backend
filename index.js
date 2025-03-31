@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Quiz = require('./models/quiz'); // Importando o modelo Quiz
+const Quiz = require('./models/quiz/Quiz');
 
 dotenv.config();
 const app = express();
