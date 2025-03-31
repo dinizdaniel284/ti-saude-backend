@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Conectar ao MongoDB
-const mongoURI = "mongodb+srv://diniz-daniel:89272514@cluster0.enuctcf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const mongoURI = process.env.MONGO_URI;  // Aqui você vai usar a variável de ambiente MONGO_URI
 mongoose.connect(mongoURI)
   .then(() => console.log('Conectado ao MongoDB'))
   .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
