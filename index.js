@@ -2,8 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Quiz = require('./models/quiz/Quiz');
-
+const Quiz = require('./models/quiz/Quiz'); // Certifique-se de que o arquivo existe dentro de uma pasta 'quiz'
 dotenv.config();
 const app = express();
 
