@@ -16,7 +16,8 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator: Number.isInteger,
       message: 'A idade deve ser um número inteiro'
-    }
+    },
+    min: [0, 'A idade não pode ser negativa']  // Garantir que idade não seja negativa
   },
   profissao: {
     type: String,
