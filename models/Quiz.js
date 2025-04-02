@@ -1,39 +1,42 @@
 const mongoose = require('mongoose');
 
 // Definir o schema para o quiz
-const quizSchema = new mongoose.Schema({
-  titulo: {
-    type: String,
-    required: [true, 'O título do quiz é obrigatório'],
-    trim: true
-  },
-  perguntas: [
-    {
-      enunciado: {
-        type: String,
-        required: [true, 'O enunciado da pergunta é obrigatório'],
-        trim: true
-      },
-      opcoes: [
-        {
-          texto: {
-            type: String,
-            required: [true, 'O texto da opção é obrigatório']
-          },
-          categoria: {
-            type: String,
-            required: [true, 'A categoria é obrigatória']
-          },
-          valor: {
-            type: Number,
-            default: 0,
-            required: false  // Deixar como opcional
+const quizSchema = new mongoose.Schema(
+  {
+    titulo: {
+      type: String,
+      required: [true, 'O título do quiz é obrigatório'],
+      trim: true
+    },
+    perguntas: [
+      {
+        enunciado: {
+          type: String,
+          required: [true, 'O enunciado da pergunta é obrigatório'],
+          trim: true
+        },
+        opcoes: [
+          {
+            texto: {
+              type: String,
+              required: [true, 'O texto da opção é obrigatório']
+            },
+            categoria: {
+              type: String,
+              required: [true, 'A categoria é obrigatória']
+            },
+            valor: {
+              type: Number,
+              default: 0,
+              required: false // Deixar como opcional
+            }
           }
-        }
-      ]
-    }
-  ]
-}, { timestamps: true });
+        ]
+      }
+    ]
+  },
+  { timestamps: true }
+);
 
 // Criar e exportar o modelo Quiz
 const Quiz = mongoose.model('Quiz', quizSchema, 'quizzes');  // Associado à coleção 'quizzes'
@@ -74,7 +77,6 @@ const criarOuAtualizarQuiz = async () => {
           { texto: 'Analisar padrões e criar previsões', categoria: 'Dados' }
         ]
       },
-      // Novas perguntas
       {
         enunciado: 'Qual é o seu nível de interesse por programação?',
         opcoes: [
@@ -123,4 +125,4 @@ const criarOuAtualizarQuiz = async () => {
 };
 
 // Chama a função para criar ou atualizar o quiz
-criarOuAtualizarQuiz(); // criarOuAtualizarQuiz();
+criarOuAtualizarQuiz(); // cria ou atualiza o quiz
