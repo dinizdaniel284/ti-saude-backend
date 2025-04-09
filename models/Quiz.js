@@ -24,11 +24,6 @@ const quizSchema = new mongoose.Schema(
             categoria: {
               type: String,
               required: [true, 'A categoria é obrigatória']
-            },
-            valor: {
-              type: Number,
-              default: 0,
-              required: false // Deixar como opcional
             }
           }
         ]
@@ -38,17 +33,14 @@ const quizSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Criar e exportar o modelo Quiz
-const Quiz = mongoose.model('Quiz', quizSchema, 'quizzes');  // Associado à coleção 'quizzes'
+const Quiz = mongoose.model('Quiz', quizSchema, 'quizzes');
 module.exports = Quiz;
 
-// Criar ou atualizar o quiz inicial com mais perguntas
+// Função para criar ou atualizar quiz sem duplicar perguntas
 const criarOuAtualizarQuiz = async () => {
   try {
-    // Buscar o quiz existente pelo título
     let quizExistente = await Quiz.findOne({ titulo: 'Quiz de Áreas de TI' });
 
-    // Novas perguntas para adicionar ao quiz
     const novasPerguntas = [
       {
         enunciado: 'Qual é o seu interesse principal na área de TI?',
@@ -81,8 +73,8 @@ const criarOuAtualizarQuiz = async () => {
         enunciado: 'Qual é o seu nível de interesse por programação?',
         opcoes: [
           { texto: 'Alta', categoria: 'Desenvolvimento' },
-          { texto: 'Médio', categoria: 'Desenvolvimento' },
-          { texto: 'Baixa', categoria: 'Desenvolvimento' }
+          { texto: 'Médio', categoria: 'Infraestrutura' },
+          { texto: 'Baixa', categoria: 'Segurança' }
         ]
       },
       {
@@ -90,7 +82,7 @@ const criarOuAtualizarQuiz = async () => {
         opcoes: [
           { texto: 'Sim, adoraria!', categoria: 'Dados' },
           { texto: 'Talvez, depende do projeto', categoria: 'Dados' },
-          { texto: 'Não, prefiro outras áreas', categoria: 'Dados' }
+          { texto: 'Não, prefiro outras áreas', categoria: 'Infraestrutura' }
         ]
       },
       {
@@ -104,25 +96,32 @@ const criarOuAtualizarQuiz = async () => {
       }
     ];
 
-    // Verifica se o quiz já existe, caso contrário, cria um novo
-    if (quizExistente) {
-      // Verifica se o quiz já contém todas as perguntas e evita duplicação
-      quizExistente.perguntas = [...quizExistente.perguntas, ...novasPerguntas];
-      await quizExistente.save();
-      console.log('✅ Quiz atualizado com sucesso!');
-    } else {
-      // Criar o quiz inicial se não existir
-      const quizExemplo = new Quiz({
+    if (!quizExistente) {
+      const quizNovo = new Quiz({
         titulo: 'Quiz de Áreas de TI',
         perguntas: novasPerguntas
       });
-      await quizExemplo.save();
-      console.log('✅ Quiz inicial salvo com sucesso!');
+      await quizNovo.save();
+      console.log('✅ Quiz inicial criado com sucesso!');
+    } else {
+      // Filtrar perguntas já existentes para evitar duplicatas
+      const perguntasExistentes = quizExistente.perguntas.map(p => p.enunciado);
+      const novasSemDuplicatas = novasPerguntas.filter(
+        pergunta => !perguntasExistentes.includes(pergunta.enunciado)
+      );
+
+      if (novasSemDuplicatas.length > 0) {
+        quizExistente.perguntas.push(...novasSemDuplicatas);
+        await quizExistente.save();
+        console.log('✅ Quiz atualizado com novas perguntas!');
+      } else {
+        console.log('📌 Nenhuma nova pergunta para adicionar.');
+      }
     }
   } catch (err) {
     console.error('❌ Erro ao salvar ou atualizar quiz:', err);
   }
 };
 
-// Chama a função para criar ou atualizar o quiz
-criarOuAtualizarQuiz(); // cria ou atualiza o quiz
+// Executar a função
+criarOuAtualizarQuiz();
