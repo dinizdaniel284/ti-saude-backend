@@ -4,7 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 
-const quizRoutes = require('./routes/quiz');
+const quizRoutes = require('./routes/Quiz');
 const User = require("./models/User");
 const Comment = require("./models/Comment");
 
