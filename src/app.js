@@ -2,10 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
-const conectarMongo = require("./src/config/database");
-const quizRoutes = require("./src/routes/Quiz");
-const comentariosRoutes = require("./src/routes/comentarios");
-const usuariosRoutes = require("./src/routes/usuarios");
+// Caminho ajustado: o app.js está em src/, então não precisa do './src/'
+const conectarMongo = require("./config/database");
+const quizRoutes = require("./routes/Quiz");
+const comentariosRoutes = require("./routes/comentarios");
+const usuariosRoutes = require("./routes/usuarios");
 
 const app = express();
 
