@@ -1,51 +1,34 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-
-// Conexão com o Banco de Dados
 const conectarMongo = require("./config/database");
 
-// Definição das Rotas
-// AJUSTE: Importando com nomes em minúsculo para evitar erro no Linux da Vercel
+// Importação das rotas (Garantindo nomes em minúsculo)
 const quizRoutes = require("./routes/quiz");
 const comentariosRoutes = require("./routes/comentarios");
 const usuariosRoutes = require("./routes/usuarios");
 
 const app = express();
 
-// Middlewares
+// Middlewares básicos
 app.use(cors());
 app.use(express.json());
 
-// Inicializar conexão com MongoDB de forma global
-(async () => {
-  try {
-    await conectarMongo();
-    console.log("🚀 MongoDB conectado com sucesso!");
-  } catch (error) {
-    console.error("❌ Erro ao conectar ao MongoDB:", error);
-  }
-})();
+// Conectar ao MongoDB (sem travar o fluxo principal)
+conectarMongo().catch(err => console.error("Erro na conexão inicial:", err));
 
-// Rota de teste para verificar se o servidor está respondendo
+// Rota de teste (A Vercel precisa que isso responda rápido)
 app.get("/", (req, res) => {
-  res.json({
+  res.status(200).json({
     status: "ok",
-    message: "API TI-Saúde online 🚀",
-    environment: process.env.NODE_ENV || "development"
+    message: "API TI-Saúde online 🚀"
   });
 });
 
-// Configuração dos caminhos das Rotas
+// Rotas da API
 app.use("/quiz", quizRoutes);
 app.use("/comentarios", comentariosRoutes);
 app.use("/usuarios", usuariosRoutes);
 
-// Gerenciamento do Servidor: Só roda app.listen se NÃO estiver na Vercel
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`🚀 Servidor local rodando na porta ${PORT}`));
-}
-
-// Exportação obrigatória para a Vercel
+// Export para Vercel
 module.exports = app;
