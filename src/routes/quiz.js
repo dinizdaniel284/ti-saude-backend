@@ -2,10 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { criarOuAtualizarQuiz, obterQuiz, responderQuiz } = require('../controllers/quizController');
 
-// Popular quiz apenas no backend (não expor em produção)
-criarOuAtualizarQuiz();
+// Popular quiz (será executado quando a função serverless "acordar")
+criarOuAtualizarQuiz().catch(err => console.error("Erro ao popular quiz:", err));
 
-router.get('/quiz', obterQuiz);
-router.post('/quiz/responder', responderQuiz);
+// Remova o '/quiz' e deixe apenas '/'
+// Agora o acesso será via: https://.../quiz
+router.get('/', obterQuiz);
+
+// Remova o '/quiz' e deixe apenas '/responder'
+// Agora o acesso será via: https://.../quiz/responder
+router.post('/responder', responderQuiz);
 
 module.exports = router;
