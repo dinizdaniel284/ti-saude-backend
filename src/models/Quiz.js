@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
 const quizSchema = new mongoose.Schema({
-  titulo: String,
+  titulo: { type: String, required: true },
   perguntas: [
     {
-      question: String, // Mudamos de enunciado para question
-      options: [String] // Mudamos de opcoes (objeto) para um array de Strings simples
+      question: String,
+      options: [String] // Array simples de textos
     }
   ]
 });
 
+// O terceiro parâmetro 'quizzes' garante que ele use a coleção correta no MongoDB
 module.exports = mongoose.model('Quiz', quizSchema, 'quizzes');
