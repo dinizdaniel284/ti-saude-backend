@@ -4,14 +4,8 @@ const quizSchema = new mongoose.Schema({
   titulo: String,
   perguntas: [
     {
-      enunciado: String,
-      opcoes: [
-        {
-          texto: String,
-          categoria: String,
-          valor: Number
-        }
-      ]
+      question: String, // Mudamos de enunciado para question
+      options: [String] // Mudamos de opcoes (objeto) para um array de Strings simples
     }
   ]
 });
