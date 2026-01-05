@@ -4,11 +4,11 @@ const quizSchema = new mongoose.Schema({
   titulo: { type: String, required: true },
   perguntas: [
     {
-      question: { type: String, required: true },
-      options: [{ type: String, required: true }]
+      question: String,
+      options: [String]
     }
   ]
 });
 
-// Usamos 'quizzes' como o nome da coleção no MongoDB
+// Forçamos o nome da coleção como 'quizzes'
 module.exports = mongoose.model('Quiz', quizSchema, 'quizzes');

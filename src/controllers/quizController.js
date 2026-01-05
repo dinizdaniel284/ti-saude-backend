@@ -3,10 +3,6 @@ const Quiz = require('../models/Quiz');
 const criarOuAtualizarQuiz = async () => {
   try {
     const tituloQuiz = 'Quiz de Áreas de TI';
-
-    // 1. Limpa o lixo antigo do banco de dados
-    await Quiz.deleteMany({});
-
     const novasPerguntas = [
       { question: "Qual atividade mais te atrai?", options: ["Criar APIs", "Analisar Dados", "Cibersegurança", "UX Design"] },
       { question: "O que prefere resolver?", options: ["Integrar Sistemas", "Gerar Relatórios", "Privacidade/LGPD", "Interfaces Médicas"] },
@@ -20,12 +16,11 @@ const criarOuAtualizarQuiz = async () => {
       { question: "Ambiente ideal:", options: ["Backstage", "Insights", "Perímetro", "Laboratório UX"] }
     ];
 
-    // 2. Cria o novo quiz com as 10 perguntas
-    const novoQuiz = new Quiz({ titulo: tituloQuiz, perguntas: novasPerguntas });
-    await novoQuiz.save();
-    console.log('✅ Banco de dados sincronizado e atualizado!');
+    await Quiz.deleteMany({});
+    await Quiz.create({ titulo: tituloQuiz, perguntas: novasPerguntas });
+    console.log('✅ Banco de dados Resetado!');
   } catch (err) {
-    console.error("Erro ao popular banco:", err);
+    console.error("Erro ao resetar:", err);
   }
 };
 
@@ -33,16 +28,14 @@ const obterQuiz = async (req, res) => {
   try {
     const quiz = await Quiz.findOne({ titulo: 'Quiz de Áreas de TI' });
     if (!quiz) return res.status(404).json({ erro: 'Quiz não encontrado' });
-    res.json({ perguntas: quiz.perguntas });
+    return res.status(200).json(quiz.perguntas); // Retorna direto o array
   } catch (err) {
-    res.status(500).json({ erro: 'Erro interno do servidor' });
+    return res.status(500).json({ erro: 'Erro no Servidor' });
   }
 };
 
 const responderQuiz = async (req, res) => {
-  const { respostas } = req.body;
-  if (!respostas) return res.status(400).json({ erro: 'Sem respostas' });
-  res.json({ resultado: "OK" });
+  res.status(200).json({ status: "ok" });
 };
 
 module.exports = { criarOuAtualizarQuiz, obterQuiz, responderQuiz };
