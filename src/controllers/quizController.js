@@ -4,7 +4,7 @@ const criarOuAtualizarQuiz = async () => {
   try {
     const tituloQuiz = 'Quiz de Áreas de TI';
 
-    // Deleta o lixo antigo (esses campos vazios que você viu)
+    // 1. Limpa o banco para remover as perguntas vazias
     await Quiz.deleteMany({});
 
     const novasPerguntas = [
@@ -20,12 +20,13 @@ const criarOuAtualizarQuiz = async () => {
       { question: "Ambiente ideal:", options: ["Backstage", "Insights", "Perímetro", "Laboratório UX"] }
     ];
 
+    // 2. Salva as novas perguntas com o formato correto
     const novoQuiz = new Quiz({ titulo: tituloQuiz, perguntas: novasPerguntas });
     await novoQuiz.save();
-    console.log('✅ Banco de dados limpo e atualizado com sucesso!');
+    console.log('✅ Banco de dados resetado e atualizado com sucesso!');
   } catch (err) {
     console.error("Erro ao resetar banco:", err);
   }
 };
 
-// ... restante do código (obterQuiz e responderQuiz)
+// Mantenha as funções obterQuiz e responderQuiz abaixo...

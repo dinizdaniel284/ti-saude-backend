@@ -5,10 +5,10 @@ const quizSchema = new mongoose.Schema({
   perguntas: [
     {
       question: String,
-      options: [String] // Array simples de textos
+      options: [String] // Isso permite salvar a lista de textos direto
     }
   ]
 });
 
-// O terceiro parâmetro 'quizzes' garante que ele use a coleção correta no MongoDB
+// O 'quizzes' no final garante que ele use a coleção correta
 module.exports = mongoose.model('Quiz', quizSchema, 'quizzes');
